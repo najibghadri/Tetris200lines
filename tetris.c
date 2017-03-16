@@ -22,7 +22,7 @@ typedef struct {
 Shape current;
 
 const Shape ShapesArray[7]= {
-	{(char *[]){(char []){1,1,1},(char []){0,1,0}, (char []){0,1,0}}, 3},                           //S_shape     
+	{(char *[]){(char []){0,1,1},(char []){1,1,0}, (char []){0,0,0}}, 3},                           //S_shape     
 	{(char *[]){(char []){1,1,0},(char []){0,1,1}, (char []){0,0,0}}, 3},                           //Z_shape     
 	{(char *[]){(char []){0,1,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //T_shape     
 	{(char *[]){(char []){0,0,1},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //L_shape     
