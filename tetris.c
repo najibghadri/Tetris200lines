@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #include <ncurses.h>
 
-#define ROWS 50
+#define ROWS 20 // you can change height and width of table with ROWS and COLS 
 #define COLS 15
 #define TRUE 1
 #define FALSE 0
@@ -12,7 +12,7 @@
 char Table[ROWS][COLS] = {0};
 int score = 0;
 char GameOn = TRUE;
-suseconds_t timer = 500000; //half a second
+suseconds_t timer = 400000; // decrease this to make it faster
 int decrease = 1000;
 
 typedef struct {
@@ -27,8 +27,9 @@ const Shape ShapesArray[7]= {
 	{(char *[]){(char []){0,1,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //T shape     
 	{(char *[]){(char []){0,0,1},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //L shape     
 	{(char *[]){(char []){1,0,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //flipped L shape    
-	{(char *[]){(char []){1,1},(char []){1,1}}, 2},     						//square shape
+	{(char *[]){(char []){1,1},(char []){1,1}}, 2},     											//square shape
 	{(char *[]){(char []){0,0,0,0}, (char []){1,1,1,1}, (char []){0,0,0,0}, (char []){0,0,0,0}}, 4} //long bar shape
+	// you can add any shape like it's done above. Don't be naughty.
 };
 
 Shape CopyShape(Shape shape){
@@ -70,7 +71,7 @@ int CheckPosition(Shape shape){ //Check the position of the copied shape
 	return TRUE;
 }
 
-void GetNewShape(){ //returns random shape
+void SetNewRandomShape(){ //updates [current] with new shape
 	Shape new_shape = CopyShape(ShapesArray[rand()%7]);
 
     new_shape.col = rand()%(COLS-new_shape.width+1);
@@ -137,7 +138,7 @@ void PrintTable(){
 	clear();
 	for(i=0; i<COLS-9; i++)
 		printw(" ");
-	printw("KAMA SUTRIS\n");
+	printw("Covid Tetris\n");
 	for(i = 0; i < ROWS ;i++){
 		for(j = 0; j < COLS ; j++){
 			printw("%c ", (Table[i][j] + Buffer[i][j])? '#': '.');
@@ -157,7 +158,7 @@ void ManipulateCurrent(int action){
 			else {
 				WriteToTable();
 				RemoveFullRowsAndUpdateScore();
-                GetNewShape();
+                SetNewRandomShape();
 			}
 			break;
 		case 'd':
@@ -171,7 +172,7 @@ void ManipulateCurrent(int action){
 				current.col--;
 			break;
 		case 'w':
-			RotateShape(temp);  //yes
+			RotateShape(temp); // rotate clockwise
 			if(CheckPosition(temp))
 				RotateShape(current);
 			break;
@@ -180,27 +181,28 @@ void ManipulateCurrent(int action){
 	PrintTable();
 }
 
+struct timeval before_now, now;
+int hasToUpdate(){
+	return ((suseconds_t)(now.tv_sec*1000000 + now.tv_usec) -((suseconds_t)before_now.tv_sec*1000000 + before_now.tv_usec)) > timer;
+}
+
 int main() {
     srand(time(0));
     score = 0;
     int c;
     initscr();
-	struct timeval before, after;
-	gettimeofday(&before, NULL);
+	gettimeofday(&before_now, NULL);
 	timeout(1);
-	inline int is_later(){
-		return ((suseconds_t)(after.tv_sec*1000000 + after.tv_usec) -((suseconds_t)before.tv_sec*1000000 + before.tv_usec)) > timer;
-	}
-	GetNewShape();
+	SetNewRandomShape();
     PrintTable();
 	while(GameOn){
 		if ((c = getch()) != ERR) {
 		  ManipulateCurrent(c);
 		}
-		gettimeofday(&after, NULL);
-		if (is_later()) { //time difference in microsec accuracy
+		gettimeofday(&now, NULL);
+		if (hasToUpdate()) { //time difference in microsec accuracy
 			ManipulateCurrent('s');
-			gettimeofday(&before, NULL);
+			gettimeofday(&before_now, NULL);
 		}
 	}
 	DeleteShape(current);
