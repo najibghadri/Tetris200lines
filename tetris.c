@@ -27,7 +27,7 @@ const Shape ShapesArray[7]= {
 	{(char *[]){(char []){0,1,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //T shape     
 	{(char *[]){(char []){0,0,1},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //L shape     
 	{(char *[]){(char []){1,0,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //flipped L shape    
-	{(char *[]){(char []){1,1},(char []){1,1}}, 2},     											//square shape
+	{(char *[]){(char []){1,1},(char []){1,1}}, 2},                                                 //square shape
 	{(char *[]){(char []){0,0,0,0}, (char []){1,1,1,1}, (char []){0,0,0,0}, (char []){0,0,0,0}}, 4} //long bar shape
 	// you can add any shape like it's done above. Don't be naughty.
 };
