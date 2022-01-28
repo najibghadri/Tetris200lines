@@ -12,7 +12,7 @@
 char Table[ROWS][COLS] = {0};
 int score = 0;
 char GameOn = TRUE;
-suseconds_t timer = 500000; //half second
+suseconds_t timer = 500000; //half a second
 int decrease = 1000;
 
 typedef struct {
@@ -22,13 +22,13 @@ typedef struct {
 Shape current;
 
 const Shape ShapesArray[7]= {
-	{(char *[]){(char []){0,1,1},(char []){1,1,0}, (char []){0,0,0}}, 3},                           //S_shape     
-	{(char *[]){(char []){1,1,0},(char []){0,1,1}, (char []){0,0,0}}, 3},                           //Z_shape     
-	{(char *[]){(char []){0,1,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //T_shape     
-	{(char *[]){(char []){0,0,1},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //L_shape     
-	{(char *[]){(char []){1,0,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //ML_shape    
-	{(char *[]){(char []){1,1},(char []){1,1}}, 2},     											//SQ_shape
-	{(char *[]){(char []){0,0,0,0}, (char []){1,1,1,1}, (char []){0,0,0,0}, (char []){0,0,0,0}}, 4} //R_shape
+	{(char *[]){(char []){0,1,1},(char []){1,1,0}, (char []){0,0,0}}, 3},                           //S shape     
+	{(char *[]){(char []){1,1,0},(char []){0,1,1}, (char []){0,0,0}}, 3},                           //Z shape     
+	{(char *[]){(char []){0,1,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //T shape     
+	{(char *[]){(char []){0,0,1},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //L shape     
+	{(char *[]){(char []){1,0,0},(char []){1,1,1}, (char []){0,0,0}}, 3},                           //flipped L shape    
+	{(char *[]){(char []){1,1},(char []){1,1}}, 2},     						//square shape
+	{(char *[]){(char []){0,0,0,0}, (char []){1,1,1,1}, (char []){0,0,0,0}, (char []){0,0,0,0}}, 4} //long bar shape
 };
 
 Shape CopyShape(Shape shape){
@@ -104,7 +104,7 @@ void WriteToTable(){
 	}
 }
 
-void Halleluyah_Baby(){ //count lines
+void RemoveFullRowsAndUpdateScore(){
 	int i, j, sum, count=0;
 	for(i=0;i<ROWS;i++){
 		sum = 0;
@@ -156,7 +156,7 @@ void ManipulateCurrent(int action){
 				current.row++;
 			else {
 				WriteToTable();
-				Halleluyah_Baby(); //check full lines, after putting it down
+				RemoveFullRowsAndUpdateScore();
                 GetNewShape();
 			}
 			break;
@@ -212,7 +212,7 @@ int main() {
 		}
 		printf("\n");
 	}
-	printf("\nGame őver!\n");
+	printf("\nGame ouvre!\n");
 	printf("\nScore: %d\n", score);
     return 0;
 }
